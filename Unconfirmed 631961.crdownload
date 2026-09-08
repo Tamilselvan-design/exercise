@@ -1,15 +1,1032 @@
-from pathlib import Path
+import tkinter as tk
+from tkinter import ttk
+from datetime import datetime
 
-# Smart Rehabilitation Monitor
-# This Python file contains the complete HTML + CSS + JavaScript.
-# Run this file once to create index.html.
-# Upload the generated index.html to GitHub Pages.
 
-website = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>Smart Rehabilitation Monitor</title>\n\n<style>\n* {\n    box-sizing: border-box;\n    margin: 0;\n    padding: 0;\n    font-family: Arial, sans-serif;\n}\n\nbody {\n    background: #f4f7fb;\n    color: #1f2937;\n}\n\nheader {\n    background: #12355b;\n    color: white;\n    padding: 22px 5%;\n}\n\nheader h1 {\n    font-size: 28px;\n}\n\nheader p {\n    margin-top: 6px;\n    opacity: 0.85;\n}\n\n.container {\n    width: 90%;\n    max-width: 1200px;\n    margin: 25px auto;\n}\n\n.patient-card,\n.card {\n    background: white;\n    border-radius: 14px;\n    padding: 22px;\n    margin-bottom: 20px;\n    box-shadow: 0 4px 15px rgba(0,0,0,0.08);\n}\n\n.patient-card {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    gap: 20px;\n}\n\n.status {\n    padding: 9px 15px;\n    border-radius: 20px;\n    background: #d1fae5;\n    color: #065f46;\n    font-weight: bold;\n}\n\n.grid {\n    display: grid;\n    grid-template-columns: repeat(3, 1fr);\n    gap: 18px;\n}\n\n.monitor-card {\n    background: white;\n    border-radius: 14px;\n    padding: 22px;\n    box-shadow: 0 4px 15px rgba(0,0,0,0.08);\n}\n\n.monitor-card h3 {\n    color: #64748b;\n    font-size: 15px;\n    margin-bottom: 12px;\n}\n\n.value {\n    font-size: 34px;\n    font-weight: bold;\n}\n\n.good {\n    color: #16a34a;\n}\n\n.fair {\n    color: #d97706;\n}\n\n.poor {\n    color: #dc2626;\n}\n\n.exercise-title {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    margin-bottom: 18px;\n}\n\n.progress {\n    width: 100%;\n    height: 14px;\n    background: #e5e7eb;\n    border-radius: 20px;\n    overflow: hidden;\n}\n\n.progress-bar {\n    height: 100%;\n    width: 80%;\n    background: #2563eb;\n    transition: width 0.4s;\n}\n\n.rep-grid {\n    display: grid;\n    grid-template-columns: repeat(3, 1fr);\n    gap: 15px;\n    margin-top: 20px;\n}\n\n.rep {\n    padding: 15px;\n    border-radius: 10px;\n    background: #f8fafc;\n    text-align: center;\n}\n\n.rep strong {\n    display: block;\n    font-size: 24px;\n    margin-top: 5px;\n}\n\n.sensor-grid {\n    display: grid;\n    grid-template-columns: repeat(2, 1fr);\n    gap: 18px;\n}\n\n.sensor {\n    border: 1px solid #e5e7eb;\n    border-radius: 12px;\n    padding: 18px;\n}\n\n.sensor h3 {\n    margin-bottom: 8px;\n}\n\n.online {\n    color: #16a34a;\n    font-weight: bold;\n}\n\n.workflow {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    gap: 10px;\n    flex-wrap: wrap;\n    margin-top: 15px;\n}\n\n.step {\n    flex: 1;\n    min-width: 150px;\n    text-align: center;\n    padding: 18px;\n    background: #eff6ff;\n    border-radius: 12px;\n    font-weight: bold;\n}\n\n.arrow {\n    font-size: 24px;\n}\n\nbutton {\n    border: none;\n    background: #2563eb;\n    color: white;\n    padding: 12px 18px;\n    border-radius: 8px;\n    cursor: pointer;\n    font-weight: bold;\n}\n\nbutton:hover {\n    background: #1d4ed8;\n}\n\n.alert-item {\n    margin-top: 12px;\n    padding: 15px;\n    border-radius: 10px;\n    display: flex;\n    justify-content: space-between;\n    gap: 15px;\n}\n\n.alert-item.high {\n    background: #fee2e2;\n    border-left: 5px solid #dc2626;\n}\n\n.alert-item.low {\n    background: #dcfce7;\n    border-left: 5px solid #16a34a;\n}\n\n.alert-item p {\n    margin-top: 5px;\n}\n\n.notification-row {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    padding: 13px 0;\n    border-bottom: 1px solid #e5e7eb;\n}\n\n.switch {\n    width: 48px;\n    height: 25px;\n    position: relative;\n}\n\n.switch input {\n    display: none;\n}\n\n.slider {\n    position: absolute;\n    inset: 0;\n    background: #cbd5e1;\n    border-radius: 20px;\n    cursor: pointer;\n}\n\n.slider:before {\n    content: "";\n    position: absolute;\n    width: 19px;\n    height: 19px;\n    left: 3px;\n    top: 3px;\n    background: white;\n    border-radius: 50%;\n    transition: 0.3s;\n}\n\ninput:checked + .slider {\n    background: #2563eb;\n}\n\ninput:checked + .slider:before {\n    transform: translateX(23px);\n}\n\nfooter {\n    text-align: center;\n    padding: 25px;\n    color: #64748b;\n}\n\n@media (max-width: 800px) {\n    .grid,\n    .sensor-grid,\n    .rep-grid {\n        grid-template-columns: 1fr;\n    }\n\n    .patient-card {\n        flex-direction: column;\n        align-items: flex-start;\n    }\n\n    .workflow {\n        flex-direction: column;\n    }\n\n    .arrow {\n        transform: rotate(90deg);\n    }\n}\n</style>\n</head>\n\n<body>\n\n<header>\n    <h1>Smart Rehabilitation Monitor</h1>\n    <p>AI-powered wearable monitoring for rehabilitation exercises</p>\n</header>\n\n<div class="container">\n\n    <div class="patient-card">\n        <div>\n            <h2>Patient 001</h2>\n            <p>Knee Rehabilitation • Exercise: Knee Flexion</p>\n        </div>\n        <div class="status">● Sensors Online</div>\n    </div>\n\n    <div class="grid">\n\n        <div class="monitor-card">\n            <h3>LIVE KNEE ANGLE</h3>\n            <div class="value" id="kneeAngle">88°</div>\n            <p>Target: 85° – 95°</p>\n        </div>\n\n        <div class="monitor-card">\n            <h3>MOVEMENT QUALITY</h3>\n            <div class="value good" id="movementQuality">GOOD</div>\n            <p>AI movement analysis</p>\n        </div>\n\n        <div class="monitor-card">\n            <h3>sEMG ACTIVITY</h3>\n            <div class="value" id="semgValue">62%</div>\n            <p>Muscle activation level</p>\n        </div>\n\n    </div>\n\n    <div class="card">\n        <div class="exercise-title">\n            <div>\n                <h2>Knee Flexion Progress</h2>\n                <p>Exercise performance</p>\n            </div>\n            <strong id="accuracy">80%</strong>\n        </div>\n\n        <div class="progress">\n            <div class="progress-bar" id="progressBar"></div>\n        </div>\n\n        <div class="rep-grid">\n            <div class="rep">\n                Total Reps\n                <strong id="totalReps">20</strong>\n            </div>\n\n            <div class="rep">\n                Correct\n                <strong id="correctReps">16</strong>\n            </div>\n\n            <div class="rep">\n                Incorrect\n                <strong id="incorrectReps">4</strong>\n            </div>\n        </div>\n    </div>\n\n    <div class="card">\n        <h2>Wearable Sensor Status</h2>\n\n        <div class="sensor-grid" style="margin-top:18px">\n\n            <div class="sensor">\n                <h3>Smart T-Shirt</h3>\n                <p>IMU + sEMG Sensors</p>\n                <p class="online">● Connected</p>\n            </div>\n\n            <div class="sensor">\n                <h3>Smart Knee Socks</h3>\n                <p>IMU Sensors</p>\n                <p class="online">● Connected</p>\n            </div>\n\n        </div>\n    </div>\n\n    <div class="card">\n        <h2>Alert Center</h2>\n        <p style="margin-top:7px">Test the rehabilitation monitoring alert.</p>\n\n        <button id="testAlert" style="margin-top:15px">\n            Test Incorrect Movement\n        </button>\n\n        <div id="alertList"></div>\n    </div>\n\n    <div class="card">\n        <h2>Notification Settings</h2>\n\n        <div class="notification-row">\n            <span>Doctor / Physiotherapist</span>\n            <label class="switch">\n                <input type="checkbox" id="doctorNotification" checked>\n                <span class="slider"></span>\n            </label>\n        </div>\n\n        <div class="notification-row">\n            <span>Caretaker</span>\n            <label class="switch">\n                <input type="checkbox" id="caretakerNotification" checked>\n                <span class="slider"></span>\n            </label>\n        </div>\n    </div>\n\n    <div class="card">\n        <h2>System Workflow</h2>\n\n        <div class="workflow">\n            <div class="step">Wearable Sensors</div>\n            <div class="arrow">→</div>\n            <div class="step">ESP32</div>\n            <div class="arrow">→</div>\n            <div class="step">AI Analysis</div>\n            <div class="arrow">→</div>\n            <div class="step">Doctor / Caretaker</div>\n        </div>\n    </div>\n\n</div>\n\n<footer>\n    Smart Rehabilitation Monitor • Prototype Dashboard\n</footer>\n\n<script>\nconst rehabData = {\n    targetMinAngle: 85,\n    targetMaxAngle: 95,\n    kneeAngle: 88,\n    semg: 62,\n    totalReps: 20,\n    correctReps: 16,\n    incorrectReps: 4\n};\n\nfunction calculateAccuracy() {\n    if (rehabData.totalReps === 0) return 0;\n    return Math.round(\n        (rehabData.correctReps / rehabData.totalReps) * 100\n    );\n}\n\nfunction getMovementQuality() {\n    const correct =\n        rehabData.kneeAngle >= rehabData.targetMinAngle &&\n        rehabData.kneeAngle <= rehabData.targetMaxAngle;\n\n    if (correct) return "GOOD";\n\n    if (\n        rehabData.kneeAngle >= rehabData.targetMinAngle - 15 &&\n        rehabData.kneeAngle <= rehabData.targetMaxAngle + 15\n    ) {\n        return "FAIR";\n    }\n\n    return "POOR";\n}\n\nfunction updateDashboard() {\n    const quality = getMovementQuality();\n\n    document.getElementById("kneeAngle").textContent =\n        rehabData.kneeAngle + "°";\n\n    const qualityElement =\n        document.getElementById("movementQuality");\n\n    qualityElement.textContent = quality;\n    qualityElement.className =\n        "value " + quality.toLowerCase();\n\n    document.getElementById("semgValue").textContent =\n        rehabData.semg + "%";\n\n    const accuracy = calculateAccuracy();\n\n    document.getElementById("accuracy").textContent =\n        accuracy + "%";\n\n    document.getElementById("progressBar").style.width =\n        accuracy + "%";\n\n    document.getElementById("totalReps").textContent =\n        rehabData.totalReps;\n\n    document.getElementById("correctReps").textContent =\n        rehabData.correctReps;\n\n    document.getElementById("incorrectReps").textContent =\n        rehabData.incorrectReps;\n}\n\nfunction createAlert(message, level) {\n    const alertList = document.getElementById("alertList");\n\n    const alert = document.createElement("div");\n\n    alert.className =\n        "alert-item " + level.toLowerCase();\n\n    alert.innerHTML = `\n        <div>\n            <strong>${level} RISK</strong>\n            <p>${message}</p>\n        </div>\n        <small>${new Date().toLocaleTimeString()}</small>\n    `;\n\n    alertList.prepend(alert);\n}\n\nfunction sendNotification(message) {\n    const doctor =\n        document.getElementById("doctorNotification").checked;\n\n    const caretaker =\n        document.getElementById("caretakerNotification").checked;\n\n    const recipients = [];\n\n    if (doctor) recipients.push("Doctor / Physiotherapist");\n    if (caretaker) recipients.push("Caretaker");\n\n    if (recipients.length > 0) {\n        console.log(\n            "Notification:",\n            recipients.join(", "),\n            message\n        );\n    }\n}\n\nfunction simulateIncorrectMovement() {\n    rehabData.kneeAngle = 55;\n    rehabData.semg = 38;\n    rehabData.incorrectReps++;\n    rehabData.totalReps++;\n\n    updateDashboard();\n\n    const message =\n        "Incorrect knee movement detected. " +\n        "Knee angle is " + rehabData.kneeAngle +\n        "°. Target range is 85°–95°.";\n\n    createAlert(message, "HIGH");\n    sendNotification(message);\n\n    setTimeout(simulateCorrectMovement, 8000);\n}\n\nfunction simulateCorrectMovement() {\n    rehabData.kneeAngle = 90;\n    rehabData.semg = 62;\n\n    updateDashboard();\n\n    createAlert(\n        "Correct knee movement detected.",\n        "LOW"\n    );\n}\n\ndocument.addEventListener("DOMContentLoaded", function() {\n    updateDashboard();\n\n    document\n        .getElementById("testAlert")\n        .addEventListener("click", simulateIncorrectMovement);\n});\n</script>\n\n</body>\n</html>\n'
+# ============================================================
+# SMART REHABILITATION MONITOR
+# Complete Python GUI
+# ============================================================
 
-output_file = Path("index.html")
-output_file.write_text(website, encoding="utf-8")
+class RehabilitationMonitor:
 
-print("Done!")
-print("Created:", output_file.resolve())
-print("Upload index.html to your GitHub repository.")
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Smart Rehabilitation Monitor")
+        self.root.geometry("1200x800")
+        self.root.minsize(950, 650)
+
+        # -----------------------------
+        # Rehabilitation data
+        # -----------------------------
+        self.patient_id = "Patient 001"
+        self.exercise = "Knee Flexion"
+
+        self.target_min = 85
+        self.target_max = 95
+
+        self.knee_angle = 88
+        self.semg = 62
+
+        self.total_reps = 20
+        self.correct_reps = 16
+        self.incorrect_reps = 4
+
+        self.create_interface()
+        self.update_dashboard()
+
+    # ========================================================
+    # MAIN INTERFACE
+    # ========================================================
+
+    def create_interface(self):
+
+        # Main background
+        self.root.configure(bg="#f4f7fb")
+
+        # -----------------------------
+        # Header
+        # -----------------------------
+        header = tk.Frame(
+            self.root,
+            bg="#12355b",
+            height=90
+        )
+        header.pack(fill="x")
+
+        title = tk.Label(
+            header,
+            text="Smart Rehabilitation Monitor",
+            font=("Arial", 25, "bold"),
+            bg="#12355b",
+            fg="white"
+        )
+        title.pack(anchor="w", padx=35, pady=(18, 2))
+
+        subtitle = tk.Label(
+            header,
+            text="AI-powered wearable rehabilitation monitoring system",
+            font=("Arial", 11),
+            bg="#12355b",
+            fg="#dbeafe"
+        )
+        subtitle.pack(anchor="w", padx=37)
+
+        # -----------------------------
+        # Scrollable area
+        # -----------------------------
+        canvas = tk.Canvas(
+            self.root,
+            bg="#f4f7fb",
+            highlightthickness=0
+        )
+        canvas.pack(side="left", fill="both", expand=True)
+
+        scrollbar = ttk.Scrollbar(
+            self.root,
+            orient="vertical",
+            command=canvas.yview
+        )
+        scrollbar.pack(side="right", fill="y")
+
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        self.main_frame = tk.Frame(
+            canvas,
+            bg="#f4f7fb"
+        )
+
+        canvas_window = canvas.create_window(
+            (0, 0),
+            window=self.main_frame,
+            anchor="nw"
+        )
+
+        self.main_frame.bind(
+            "<Configure>",
+            lambda event: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
+
+        canvas.bind(
+            "<Configure>",
+            lambda event: canvas.itemconfig(
+                canvas_window,
+                width=event.width
+            )
+        )
+
+        # -----------------------------
+        # Patient information
+        # -----------------------------
+        self.create_patient_card()
+
+        # -----------------------------
+        # Live monitoring
+        # -----------------------------
+        self.create_live_monitoring()
+
+        # -----------------------------
+        # Exercise progress
+        # -----------------------------
+        self.create_exercise_progress()
+
+        # -----------------------------
+        # Wearable sensors
+        # -----------------------------
+        self.create_sensor_section()
+
+        # -----------------------------
+        # Alert center
+        # -----------------------------
+        self.create_alert_section()
+
+        # -----------------------------
+        # Notification settings
+        # -----------------------------
+        self.create_notification_section()
+
+        # -----------------------------
+        # Workflow
+        # -----------------------------
+        self.create_workflow()
+
+        # -----------------------------
+        # Footer
+        # -----------------------------
+        footer = tk.Label(
+            self.main_frame,
+            text="Smart Rehabilitation Monitor • Prototype",
+            font=("Arial", 10),
+            bg="#f4f7fb",
+            fg="#64748b"
+        )
+        footer.pack(pady=25)
+
+    # ========================================================
+    # PATIENT CARD
+    # ========================================================
+
+    def create_patient_card(self):
+
+        card = tk.Frame(
+            self.main_frame,
+            bg="white",
+            bd=0,
+            highlightbackground="#e5e7eb",
+            highlightthickness=1
+        )
+        card.pack(
+            fill="x",
+            padx=30,
+            pady=20
+        )
+
+        left = tk.Frame(card, bg="white")
+        left.pack(side="left", padx=25, pady=18)
+
+        tk.Label(
+            left,
+            text=self.patient_id,
+            font=("Arial", 20, "bold"),
+            bg="white",
+            fg="#1f2937"
+        ).pack(anchor="w")
+
+        tk.Label(
+            left,
+            text="Knee Rehabilitation  •  Exercise: Knee Flexion",
+            font=("Arial", 11),
+            bg="white",
+            fg="#64748b"
+        ).pack(anchor="w", pady=5)
+
+        self.sensor_status = tk.Label(
+            card,
+            text="●  SENSORS ONLINE",
+            font=("Arial", 11, "bold"),
+            bg="#dcfce7",
+            fg="#15803d",
+            padx=15,
+            pady=8
+        )
+        self.sensor_status.pack(
+            side="right",
+            padx=25
+        )
+
+    # ========================================================
+    # LIVE MONITORING
+    # ========================================================
+
+    def create_live_monitoring(self):
+
+        title = tk.Label(
+            self.main_frame,
+            text="Live Monitoring",
+            font=("Arial", 19, "bold"),
+            bg="#f4f7fb",
+            fg="#1f2937"
+        )
+        title.pack(anchor="w", padx=30, pady=(5, 15))
+
+        container = tk.Frame(
+            self.main_frame,
+            bg="#f4f7fb"
+        )
+        container.pack(
+            fill="x",
+            padx=30
+        )
+
+        # Knee angle
+        self.knee_card = self.create_monitor_card(
+            container,
+            "LIVE KNEE ANGLE",
+            "88°",
+            "Target: 85° – 95°"
+        )
+
+        # Movement quality
+        self.quality_card = self.create_monitor_card(
+            container,
+            "MOVEMENT QUALITY",
+            "GOOD",
+            "AI movement analysis"
+        )
+
+        # sEMG
+        self.semg_card = self.create_monitor_card(
+            container,
+            "sEMG ACTIVITY",
+            "62%",
+            "Muscle activation level"
+        )
+
+        self.knee_card.pack(
+            side="left",
+            fill="both",
+            expand=True,
+            padx=(0, 8)
+        )
+
+        self.quality_card.pack(
+            side="left",
+            fill="both",
+            expand=True,
+            padx=8
+        )
+
+        self.semg_card.pack(
+            side="left",
+            fill="both",
+            expand=True,
+            padx=(8, 0)
+        )
+
+    def create_monitor_card(
+        self,
+        parent,
+        heading,
+        value,
+        description
+    ):
+
+        card = tk.Frame(
+            parent,
+            bg="white",
+            highlightbackground="#e5e7eb",
+            highlightthickness=1
+        )
+
+        tk.Label(
+            card,
+            text=heading,
+            font=("Arial", 10, "bold"),
+            bg="white",
+            fg="#64748b"
+        ).pack(
+            anchor="w",
+            padx=20,
+            pady=(18, 5)
+        )
+
+        value_label = tk.Label(
+            card,
+            text=value,
+            font=("Arial", 27, "bold"),
+            bg="white",
+            fg="#1f2937"
+        )
+        value_label.pack(
+            anchor="w",
+            padx=20
+        )
+
+        tk.Label(
+            card,
+            text=description,
+            font=("Arial", 10),
+            bg="white",
+            fg="#64748b"
+        ).pack(
+            anchor="w",
+            padx=20,
+            pady=(5, 18)
+        )
+
+        card.value_label = value_label
+
+        return card
+
+    # ========================================================
+    # EXERCISE PROGRESS
+    # ========================================================
+
+    def create_exercise_progress(self):
+
+        card = tk.Frame(
+            self.main_frame,
+            bg="white",
+            highlightbackground="#e5e7eb",
+            highlightthickness=1
+        )
+        card.pack(
+            fill="x",
+            padx=30,
+            pady=20
+        )
+
+        top = tk.Frame(card, bg="white")
+        top.pack(
+            fill="x",
+            padx=25,
+            pady=(20, 10)
+        )
+
+        tk.Label(
+            top,
+            text="Knee Flexion Progress",
+            font=("Arial", 18, "bold"),
+            bg="white",
+            fg="#1f2937"
+        ).pack(side="left")
+
+        self.accuracy_label = tk.Label(
+            top,
+            text="80%",
+            font=("Arial", 20, "bold"),
+            bg="white",
+            fg="#2563eb"
+        )
+        self.accuracy_label.pack(side="right")
+
+        tk.Label(
+            card,
+            text="Exercise performance",
+            font=("Arial", 10),
+            bg="white",
+            fg="#64748b"
+        ).pack(
+            anchor="w",
+            padx=25
+        )
+
+        # Progress bar
+        self.progress = ttk.Progressbar(
+            card,
+            orient="horizontal",
+            length=500,
+            mode="determinate"
+        )
+        self.progress.pack(
+            fill="x",
+            padx=25,
+            pady=20
+        )
+
+        # Rep cards
+        reps = tk.Frame(
+            card,
+            bg="white"
+        )
+        reps.pack(
+            fill="x",
+            padx=25,
+            pady=(0, 20)
+        )
+
+        self.total_label = self.create_rep_card(
+            reps,
+            "TOTAL REPS",
+            "20"
+        )
+
+        self.correct_label = self.create_rep_card(
+            reps,
+            "CORRECT",
+            "16"
+        )
+
+        self.incorrect_label = self.create_rep_card(
+            reps,
+            "INCORRECT",
+            "4"
+        )
+
+    def create_rep_card(
+        self,
+        parent,
+        title,
+        value
+    ):
+
+        frame = tk.Frame(
+            parent,
+            bg="#f8fafc",
+            highlightbackground="#e5e7eb",
+            highlightthickness=1
+        )
+
+        frame.pack(
+            side="left",
+            fill="both",
+            expand=True,
+            padx=5
+        )
+
+        tk.Label(
+            frame,
+            text=title,
+            font=("Arial", 9, "bold"),
+            bg="#f8fafc",
+            fg="#64748b"
+        ).pack(pady=(12, 3))
+
+        value_label = tk.Label(
+            frame,
+            text=value,
+            font=("Arial", 22, "bold"),
+            bg="#f8fafc",
+            fg="#1f2937"
+        )
+
+        value_label.pack(pady=(0, 12))
+
+        return value_label
+
+    # ========================================================
+    # SENSOR SECTION
+    # ========================================================
+
+    def create_sensor_section(self):
+
+        card = tk.Frame(
+            self.main_frame,
+            bg="white",
+            highlightbackground="#e5e7eb",
+            highlightthickness=1
+        )
+        card.pack(
+            fill="x",
+            padx=30,
+            pady=(0, 20)
+        )
+
+        tk.Label(
+            card,
+            text="Wearable Sensor Status",
+            font=("Arial", 18, "bold"),
+            bg="white",
+            fg="#1f2937"
+        ).pack(
+            anchor="w",
+            padx=25,
+            pady=(20, 15)
+        )
+
+        sensors = tk.Frame(
+            card,
+            bg="white"
+        )
+        sensors.pack(
+            fill="x",
+            padx=25,
+            pady=(0, 20)
+        )
+
+        self.create_sensor_card(
+            sensors,
+            "SMART T-SHIRT",
+            "IMU + sEMG Sensors"
+        )
+
+        self.create_sensor_card(
+            sensors,
+            "SMART KNEE SOCKS",
+            "IMU Sensors"
+        )
+
+    def create_sensor_card(
+        self,
+        parent,
+        title,
+        description
+    ):
+
+        sensor = tk.Frame(
+            parent,
+            bg="#f8fafc",
+            highlightbackground="#e5e7eb",
+            highlightthickness=1
+        )
+
+        sensor.pack(
+            side="left",
+            fill="both",
+            expand=True,
+            padx=5
+        )
+
+        tk.Label(
+            sensor,
+            text=title,
+            font=("Arial", 12, "bold"),
+            bg="#f8fafc",
+            fg="#1f2937"
+        ).pack(
+            anchor="w",
+            padx=15,
+            pady=(15, 5)
+        )
+
+        tk.Label(
+            sensor,
+            text=description,
+            font=("Arial", 10),
+            bg="#f8fafc",
+            fg="#64748b"
+        ).pack(
+            anchor="w",
+            padx=15
+        )
+
+        tk.Label(
+            sensor,
+            text="● Connected",
+            font=("Arial", 10, "bold"),
+            bg="#f8fafc",
+            fg="#16a34a"
+        ).pack(
+            anchor="w",
+            padx=15,
+            pady=(8, 15)
+        )
+
+    # ========================================================
+    # ALERT CENTER
+    # ========================================================
+
+    def create_alert_section(self):
+
+        card = tk.Frame(
+            self.main_frame,
+            bg="white",
+            highlightbackground="#e5e7eb",
+            highlightthickness=1
+        )
+        card.pack(
+            fill="x",
+            padx=30,
+            pady=(0, 20)
+        )
+
+        title_frame = tk.Frame(
+            card,
+            bg="white"
+        )
+        title_frame.pack(
+            fill="x",
+            padx=25,
+            pady=(20, 5)
+        )
+
+        tk.Label(
+            title_frame,
+            text="Alert Center",
+            font=("Arial", 18, "bold"),
+            bg="white",
+            fg="#1f2937"
+        ).pack(side="left")
+
+        self.alert_button = tk.Button(
+            title_frame,
+            text="TEST INCORRECT MOVEMENT",
+            command=self.simulate_incorrect_movement,
+            bg="#dc2626",
+            fg="white",
+            activebackground="#b91c1c",
+            activeforeground="white",
+            relief="flat",
+            padx=15,
+            pady=9,
+            cursor="hand2"
+        )
+        self.alert_button.pack(side="right")
+
+        tk.Label(
+            card,
+            text="AI detects abnormal rehabilitation movement and generates an alert.",
+            font=("Arial", 10),
+            bg="white",
+            fg="#64748b"
+        ).pack(
+            anchor="w",
+            padx=25,
+            pady=(0, 12)
+        )
+
+        self.alert_list = tk.Frame(
+            card,
+            bg="white"
+        )
+        self.alert_list.pack(
+            fill="x",
+            padx=25,
+            pady=(0, 20)
+        )
+
+    def create_alert(
+        self,
+        message,
+        level="HIGH"
+    ):
+
+        alert_bg = "#fee2e2"
+        alert_fg = "#dc2626"
+
+        if level == "LOW":
+            alert_bg = "#dcfce7"
+            alert_fg = "#15803d"
+
+        alert = tk.Frame(
+            self.alert_list,
+            bg=alert_bg
+        )
+        alert.pack(
+            fill="x",
+            pady=5
+        )
+
+        left = tk.Frame(
+            alert,
+            bg=alert_bg
+        )
+        left.pack(
+            side="left",
+            padx=15,
+            pady=12
+        )
+
+        tk.Label(
+            left,
+            text=f"{level} RISK",
+            font=("Arial", 10, "bold"),
+            bg=alert_bg,
+            fg=alert_fg
+        ).pack(anchor="w")
+
+        tk.Label(
+            left,
+            text=message,
+            font=("Arial", 10),
+            bg=alert_bg,
+            fg="#374151",
+            wraplength=800,
+            justify="left"
+        ).pack(anchor="w", pady=3)
+
+        tk.Label(
+            alert,
+            text=datetime.now().strftime("%H:%M:%S"),
+            font=("Arial", 9),
+            bg=alert_bg,
+            fg="#64748b"
+        ).pack(
+            side="right",
+            padx=15
+        )
+
+    # ========================================================
+    # NOTIFICATION SETTINGS
+    # ========================================================
+
+    def create_notification_section(self):
+
+        card = tk.Frame(
+            self.main_frame,
+            bg="white",
+            highlightbackground="#e5e7eb",
+            highlightthickness=1
+        )
+
+        card.pack(
+            fill="x",
+            padx=30,
+            pady=(0, 20)
+        )
+
+        tk.Label(
+            card,
+            text="Notification Settings",
+            font=("Arial", 18, "bold"),
+            bg="white",
+            fg="#1f2937"
+        ).pack(
+            anchor="w",
+            padx=25,
+            pady=(20, 10)
+        )
+
+        self.doctor_notification = tk.BooleanVar(value=True)
+        self.caretaker_notification = tk.BooleanVar(value=True)
+
+        self.create_notification_row(
+            card,
+            "Doctor / Physiotherapist",
+            self.doctor_notification
+        )
+
+        self.create_notification_row(
+            card,
+            "Caretaker",
+            self.caretaker_notification
+        )
+
+    def create_notification_row(
+        self,
+        parent,
+        text,
+        variable
+    ):
+
+        row = tk.Frame(
+            parent,
+            bg="white"
+        )
+
+        row.pack(
+            fill="x",
+            padx=25,
+            pady=8
+        )
+
+        tk.Label(
+            row,
+            text=text,
+            font=("Arial", 11),
+            bg="white",
+            fg="#374151"
+        ).pack(side="left")
+
+        tk.Checkbutton(
+            row,
+            variable=variable,
+            bg="white",
+            activebackground="white"
+        ).pack(side="right")
+
+    # ========================================================
+    # WORKFLOW
+    # ========================================================
+
+    def create_workflow(self):
+
+        card = tk.Frame(
+            self.main_frame,
+            bg="white",
+            highlightbackground="#e5e7eb",
+            highlightthickness=1
+        )
+
+        card.pack(
+            fill="x",
+            padx=30,
+            pady=(0, 20)
+        )
+
+        tk.Label(
+            card,
+            text="System Workflow",
+            font=("Arial", 18, "bold"),
+            bg="white",
+            fg="#1f2937"
+        ).pack(
+            anchor="w",
+            padx=25,
+            pady=(20, 15)
+        )
+
+        workflow = tk.Frame(
+            card,
+            bg="white"
+        )
+        workflow.pack(
+            fill="x",
+            padx=25,
+            pady=(0, 25)
+        )
+
+        steps = [
+            "WEARABLE\nSENSORS",
+            "ESP32",
+            "AI\nANALYSIS",
+            "DOCTOR /\nCARETAKER"
+        ]
+
+        for i, step in enumerate(steps):
+
+            box = tk.Label(
+                workflow,
+                text=step,
+                font=("Arial", 11, "bold"),
+                bg="#eff6ff",
+                fg="#1e40af",
+                width=17,
+                height=3
+            )
+
+            box.pack(
+                side="left",
+                fill="x",
+                expand=True
+            )
+
+            if i < len(steps) - 1:
+
+                tk.Label(
+                    workflow,
+                    text="→",
+                    font=("Arial", 22, "bold"),
+                    bg="white",
+                    fg="#64748b"
+                ).pack(
+                    side="left",
+                    padx=8
+                )
+
+    # ========================================================
+    # DASHBOARD UPDATE
+    # ========================================================
+
+    def update_dashboard(self):
+
+        accuracy = 0
+
+        if self.total_reps > 0:
+            accuracy = round(
+                (self.correct_reps / self.total_reps) * 100
+            )
+
+        # Knee angle
+        self.knee_card.value_label.config(
+            text=f"{self.knee_angle}°"
+        )
+
+        # Movement quality
+        if (
+            self.target_min
+            <= self.knee_angle
+            <= self.target_max
+        ):
+            quality = "GOOD"
+            quality_color = "#16a34a"
+
+        elif (
+            self.target_min - 15
+            <= self.knee_angle
+            <= self.target_max + 15
+        ):
+            quality = "FAIR"
+            quality_color = "#d97706"
+
+        else:
+            quality = "POOR"
+            quality_color = "#dc2626"
+
+        self.quality_card.value_label.config(
+            text=quality,
+            fg=quality_color
+        )
+
+        # sEMG
+        self.semg_card.value_label.config(
+            text=f"{self.semg}%"
+        )
+
+        # Accuracy
+        self.accuracy_label.config(
+            text=f"{accuracy}%"
+        )
+
+        self.progress["value"] = accuracy
+
+        # Repetitions
+        self.total_label.config(
+            text=str(self.total_reps)
+        )
+
+        self.correct_label.config(
+            text=str(self.correct_reps)
+        )
+
+        self.incorrect_label.config(
+            text=str(self.incorrect_reps)
+        )
+
+    # ========================================================
+    # INCORRECT MOVEMENT
+    # ========================================================
+
+    def simulate_incorrect_movement(self):
+
+        # Simulated abnormal sensor values
+        self.knee_angle = 55
+        self.semg = 38
+
+        self.incorrect_reps += 1
+        self.total_reps += 1
+
+        self.update_dashboard()
+
+        message = (
+            f"Incorrect knee movement detected. "
+            f"Knee angle: {self.knee_angle}°. "
+            f"Target range: {self.target_min}°–{self.target_max}°."
+        )
+
+        self.create_alert(
+            message,
+            "HIGH"
+        )
+
+        self.send_notification(message)
+
+        # Automatically return to normal after 5 seconds
+        self.root.after(
+            5000,
+            self.simulate_correct_movement
+        )
+
+    # ========================================================
+    # CORRECT MOVEMENT
+    # ========================================================
+
+    def simulate_correct_movement(self):
+
+        self.knee_angle = 90
+        self.semg = 62
+
+        self.update_dashboard()
+
+        self.create_alert(
+            "Correct knee movement detected.",
+            "LOW"
+        )
+
+    # ========================================================
+    # NOTIFICATION
+    # ========================================================
+
+    def send_notification(self, message):
+
+        recipients = []
+
+        if self.doctor_notification.get():
+            recipients.append("Doctor / Physiotherapist")
+
+        if self.caretaker_notification.get():
+            recipients.append("Caretaker")
+
+        if recipients:
+
+            print("\n--------------------------------")
+            print("REHABILITATION ALERT")
+            print("--------------------------------")
+            print("Message:", message)
+            print("Sent to:", ", ".join(recipients))
+            print("--------------------------------\n")
+
+
+# ============================================================
+# START APPLICATION
+# ============================================================
+
+if __name__ == "__main__":
+
+    root = tk.Tk()
+
+    app = RehabilitationMonitor(root)
+
+    root.mainloop()
