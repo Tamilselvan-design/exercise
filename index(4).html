@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Rehabilitation Monitor</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f7fb;color:#1f2937}
+header{background:#12355b;color:white;padding:25px 5%}
+header h1{font-size:28px}
+header p{margin-top:7px;color:#dbeafe}
+.container{width:90%;max-width:1200px;margin:25px auto}
+.card,.monitor{background:white;border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 4px 15px rgba(0,0,0,.08)}
+.patient{display:flex;justify-content:space-between;align-items:center}
+.status{background:#dcfce7;color:#15803d;padding:10px 15px;border-radius:20px;font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.monitor h3{font-size:14px;color:#64748b;margin-bottom:12px}
+.value{font-size:34px;font-weight:bold}
+.good{color:#16a34a}.fair{color:#d97706}.poor{color:#dc2626}
+.progress{height:14px;background:#e5e7eb;border-radius:20px;overflow:hidden;margin:20px 0}
+.bar{height:100%;background:#2563eb;width:80%;transition:.4s}
+.reps,.sensors,.workflow{display:grid;gap:15px}
+.reps{grid-template-columns:repeat(3,1fr)}
+.rep,.sensor,.step{background:#f8fafc;padding:18px;border-radius:10px;text-align:center}
+.rep strong{display:block;font-size:25px;margin-top:7px}
+.sensors{grid-template-columns:repeat(2,1fr)}
+.sensor{text-align:left;border:1px solid #e5e7eb}
+.online{color:#16a34a;font-weight:bold;margin-top:8px}
+button{border:0;background:#dc2626;color:white;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer}
+button:hover{background:#b91c1c}
+.alert{padding:15px;border-radius:10px;margin-top:12px;display:flex;justify-content:space-between}
+.high{background:#fee2e2;border-left:5px solid #dc2626}
+.low{background:#dcfce7;border-left:5px solid #16a34a}
+.alert p{margin-top:5px}
+.notify{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid #e5e7eb}
+.workflow{grid-template-columns:repeat(4,1fr);align-items:center}
+.step{background:#eff6ff;color:#1e40af;font-weight:bold}
+footer{text-align:center;color:#64748b;padding:25px}
+@media(max-width:800px){.grid,.reps,.sensors,.workflow{grid-template-columns:1fr}.patient{display:block}.status{display:inline-block;margin-top:15px}}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Smart Rehabilitation Monitor</h1>
+<p>AI-powered wearable rehabilitation monitoring system</p>
+</header>
+
+<main class="container">
+
+<section class="card patient">
+<div>
+<h2>Patient 001</h2>
+<p>Knee Rehabilitation • Exercise: Knee Flexion</p>
+</div>
+<div class="status">● Sensors Online</div>
+</section>
+
+<section class="grid">
+<div class="monitor">
+<h3>LIVE KNEE ANGLE</h3>
+<div class="value" id="angle">88°</div>
+<p>Target: 85° – 95°</p>
+</div>
+<div class="monitor">
+<h3>MOVEMENT QUALITY</h3>
+<div class="value good" id="quality">GOOD</div>
+<p>AI movement analysis</p>
+</div>
+<div class="monitor">
+<h3>sEMG ACTIVITY</h3>
+<div class="value" id="semg">62%</div>
+<p>Muscle activation level</p>
+</div>
+</section>
+
+<section class="card">
+<h2>Knee Flexion Progress <span id="accuracy" style="float:right;color:#2563eb">80%</span></h2>
+<p>Exercise performance</p>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div class="reps">
+<div class="rep">Total Reps<strong id="total">20</strong></div>
+<div class="rep">Correct<strong id="correct">16</strong></div>
+<div class="rep">Incorrect<strong id="incorrect">4</strong></div>
+</div>
+</section>
+
+<section class="card">
+<h2>Wearable Sensor Status</h2>
+<div class="sensors" style="margin-top:15px">
+<div class="sensor"><h3>Smart T-Shirt</h3><p>IMU + sEMG Sensors</p><p class="online">● Connected</p></div>
+<div class="sensor"><h3>Smart Knee Socks</h3><p>IMU Sensors</p><p class="online">● Connected</p></div>
+</div>
+</section>
+
+<section class="card">
+<h2>Alert Center</h2>
+<p style="margin:7px 0 12px">Test the AI movement detection.</p>
+<button onclick="incorrectMovement()">Test Incorrect Movement</button>
+<div id="alerts"></div>
+</section>
+
+<section class="card">
+<h2>Notification Settings</h2>
+<div class="notify"><span>Doctor / Physiotherapist</span><input type="checkbox" id="doctor" checked></div>
+<div class="notify"><span>Caretaker</span><input type="checkbox" id="caretaker" checked></div>
+</section>
+
+<section class="card">
+<h2>System Workflow</h2>
+<div class="workflow" style="margin-top:15px">
+<div class="step">Wearable Sensors</div>
+<div class="step">ESP32</div>
+<div class="step">AI Analysis</div>
+<div class="step">Doctor / Caretaker</div>
+</div>
+</section>
+
+</main>
+
+<footer>Smart Rehabilitation Monitor • Prototype Website</footer>
+
+<script>
+let angle=88, semg=62, total=20, correct=16, incorrect=4;
+
+function update(){
+    document.getElementById("angle").textContent=angle+"°";
+    document.getElementById("semg").textContent=semg+"%";
+    document.getElementById("total").textContent=total;
+    document.getElementById("correct").textContent=correct;
+    document.getElementById("incorrect").textContent=incorrect;
+
+    let accuracy=Math.round((correct/total)*100);
+    document.getElementById("accuracy").textContent=accuracy+"%";
+    document.getElementById("bar").style.width=accuracy+"%";
+
+    let q=document.getElementById("quality");
+    if(angle>=85 && angle<=95){
+        q.textContent="GOOD";
+        q.className="value good";
+    }else if(angle>=70 && angle<=110){
+        q.textContent="FAIR";
+        q.className="value fair";
+    }else{
+        q.textContent="POOR";
+        q.className="value poor";
+    }
+}
+
+function incorrectMovement(){
+    angle=55;
+    semg=38;
+    incorrect++;
+    total++;
+    update();
+
+    let recipients=[];
+    if(document.getElementById("doctor").checked) recipients.push("Doctor / Physiotherapist");
+    if(document.getElementById("caretaker").checked) recipients.push("Caretaker");
+
+    let box=document.createElement("div");
+    box.className="alert high";
+    box.innerHTML="<div><strong>HIGH RISK</strong><p>Incorrect knee movement detected. Knee angle: 55°. Target: 85°–95°.</p><small>Notification: "+(recipients.length?recipients.join(", "):"None")+"</small></div><small>"+new Date().toLocaleTimeString()+"</small>";
+    document.getElementById("alerts").prepend(box);
+
+    setTimeout(correctMovement,5000);
+}
+
+function correctMovement(){
+    angle=90;
+    semg=62;
+    update();
+
+    let box=document.createElement("div");
+    box.className="alert low";
+    box.innerHTML="<div><strong>LOW RISK</strong><p>Correct knee movement detected.</p></div><small>"+new Date().toLocaleTimeString()+"</small>";
+    document.getElementById("alerts").prepend(box);
+}
+
+update();
+</script>
+</body>
+</html>
